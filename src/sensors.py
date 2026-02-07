@@ -1,4 +1,3 @@
-from os import name, path, sysconf_names
 from pathlib import Path
 import subprocess
 
@@ -166,11 +165,3 @@ class HwmonManager:
             else:
                 self.hwmonx.append(dev)
 
-if __name__ == "__main__":
-
-    test = HwmonManager()
-    test.findDevices()
-    for i in test.hwmonx:
-        i.printSensors() 
-
-     
