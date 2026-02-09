@@ -35,7 +35,7 @@ class Sensor:
                     self.maxValue = readValue
                 if int(self.currentValue) < int(self.minValue):
                     self.minValue = readValue
-        except ():
+        except (OSError):
             pass
 
 class HwmonDevice:
