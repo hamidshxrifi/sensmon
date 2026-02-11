@@ -61,3 +61,17 @@ class NvManager:
             else:
                 self.gpus[idx] = NvGPU(idx, name, temp, power, gc, mc)
 
+    def resetValues(self) -> None:
+        for gpu in self.gpus.values():
+            gpu.temp.minValue = gpu.temp.currentValue
+            gpu.temp.maxValue = gpu.temp.currentValue
+
+            gpu.power.minValue = gpu.power.currentValue
+            gpu.power.maxValue = gpu.power.currentValue
+
+            gpu.graphicsClock.minValue = gpu.graphicsClock.currentValue
+            gpu.graphicsClock.maxValue = gpu.graphicsClock.currentValue
+
+            gpu.memoryClock.minValue = gpu.memoryClock.currentValue
+            gpu.memoryClock.maxValue = gpu.memoryClock.currentValue
+
