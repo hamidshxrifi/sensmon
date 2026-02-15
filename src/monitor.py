@@ -1,3 +1,4 @@
+import os
 import sys
 import subprocess
 from PyQt6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem
@@ -7,6 +8,9 @@ from PyQt6.QtGui import QIcon
 
 import sensors
 import nvidiaGPU
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+os.chdir(BASE_DIR)
 
 class MainWindow(QMainWindow):
     def __init__(self) -> None:
@@ -21,9 +25,10 @@ class MainWindow(QMainWindow):
         self.components = sensors.HwmonManager()
         self.components.findDevices()
         self.sensorRows = {}
-        self. nvRows = {}
+        self.nvRows = {}
 
         uic.loadUi('ui/monitor.ui', self)
+        self.setWindowTitle("Sensmon")
         self.treeWidget.setSelectionMode(self.treeWidget.SelectionMode.NoSelection)
         self.treeWidget.setColumnWidth(0, 350)
         self.treeWidget.setIndentation(40)

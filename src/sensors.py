@@ -1,8 +1,10 @@
 from pathlib import Path
 import subprocess
 
+# Known motherboard indentifers used in hwmon naming
 MOTHERBOARDS = ("gigabyte_wmi", "it87", "it86", "thinkpad-isa")
 
+# represents a single hwmon sensor (_input file)
 class Sensor:
     def __init__(self, inputPath: Path, label: str, sensType: str) -> None:
         self.inputPath = inputPath
@@ -38,6 +40,8 @@ class Sensor:
         except (OSError):
             pass
 
+# represents a single hwmon device directory
+# a single hwmon device may consist of multiple sensors
 class HwmonDevice:
     def __init__(self, name: str, path: Path) -> None:
         self.name = name
@@ -52,6 +56,7 @@ class HwmonDevice:
             "freq": "Clock"
         }
 
+    # discover valid input files in device directory and converts them to Sensor objects
     def findSensors(self) -> None:
         sortOrder = {"Temperature": 0, "Voltage": 1, "RPM": 2, "Power": 3, "Clock": 4}
 
@@ -67,7 +72,8 @@ class HwmonDevice:
 
                 sensor = Sensor(file, label, sensType)
                 self.sensors.append(sensor)
-        
+
+        # reorder the list of sensors, as discovery produced a random order
         self.sensors.sort(key=lambda s: (
             sortOrder.get(s.sensType, 99), 
             Path(s.inputPath).name
@@ -90,12 +96,20 @@ class HwmonDevice:
             print(i.getCurrent(), end=' ')
         print("")
 
+# builds a list of HwmonDevice objects from hwmon devices under /sys/class/hwmon
 class HwmonManager:
     def __init__(self) -> None:
         self.hwmonx = []
         self.path = Path("/sys/class/hwmon/")
         self.devNum = 0
-
+    
+    """
+    convert kernel provided hwmon name to more identifiable name:
+        - motherboard -> vendor + board name (DMI)
+        - cpu -> model name from /proc/cpuinfo
+        - nvme -> model from device/model
+        - gpu -> renderer string from glxinfo
+    """
     def getDeviceDisplayName(self, hwmonPath: Path, defaultName: str) -> str:
 
         # motherboard check
@@ -134,17 +148,20 @@ class HwmonManager:
                 return defaultName
 
         return defaultName
-
+    
+    # loop through hwmon directories, construct HwmonDevice objects
     def findDevices(self) -> None:
         if not self.path.exists():
             return
-
+        
+        # reorder to numerical order of hwmon directories
         hwmonDirs = sorted(
             self.path.iterdir(),
             key=lambda p: int(p.name.replace("hwmon", ""))
         )
-
+        
         for hwmonPath in hwmonDirs:
+            # catches case where sensors may be found in hwmonX/device/
             if (hwmonPath / "name").exists():
                 sensorPath = hwmonPath
             elif (hwmonPath / "device/name").exists():

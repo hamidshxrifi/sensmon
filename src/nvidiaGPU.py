@@ -17,7 +17,9 @@ class Metric:
         self.maxValue = max(self.maxValue, value)
         self.minValue = min(self.minValue, value)
 
+# represents a single gpu entry, keeps track of current/min/max values
 class NvGPU:
+    # parameters are strings values returned from nvidia-smi
     def __init__(self, idNum: str, model: str, temp: str, power: str, gc: str, mc: str) -> None:
         self.id = idNum
         self.model = model
@@ -33,6 +35,7 @@ class NvGPU:
         self.graphicsClock.update(safe_float(gc))
         self.memoryClock.update(safe_float(mc))
 
+# discovers and maintains NvGPU objects built from the output of nvidia-smi
 class NvManager:
     def __init__(self) -> None:
         self.gpus = {}
@@ -61,6 +64,7 @@ class NvManager:
             else:
                 self.gpus[idx] = NvGPU(idx, name, temp, power, gc, mc)
 
+    # reset min/max tracking
     def resetValues(self) -> None:
         for gpu in self.gpus.values():
             gpu.temp.minValue = gpu.temp.currentValue
