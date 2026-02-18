@@ -1,6 +1,8 @@
 # Sensmon
 A real-time hardware sensor monitoring application for Linux.
 
+![Sensmon Dashboard](docs/screenshot.png) 
+
 ## Description
 Sensmon is a PyQt6-based desktop application that uses the Linux `hwmon` interface to display hardware sensor data, including temperature, voltage, fan RPM, and power readings. It improves readability by mapping kernel-exposed sensor device names to their actual hardware device names, making the output easier to understand.
 
@@ -17,7 +19,7 @@ cd sensmon
 ```
 ### Executing Program
 Make the script executable and run:
-```
+```bash
 chmod +x sensmon
 ./sensmon
 ```
