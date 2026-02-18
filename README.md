@@ -4,7 +4,7 @@ A real-time hardware sensor monitoring application for Linux.
 ![Sensmon Dashboard](docs/screenshot.png) 
 
 ## Description
-Sensmon is a PyQt6-based desktop application that uses the Linux `hwmon` interface to display hardware sensor data, including temperature, voltage, fan RPM, and power readings. It improves readability by mapping kernel-exposed sensor device names to their actual hardware device names, making the output easier to understand.
+Sensmon is a PyQt6-based application that uses the Linux `hwmon` interface to display hardware sensor data, including temperature, voltage, fan RPM, and power readings. It improves readability by mapping kernel-exposed sensor device names to their actual hardware device names, making the output easier to understand.
 
 Support for NVIDIA GPUs is provided via `nvidia-smi`, allowing GPU-specific metrics to be integrated alongside standard system sensors.
 
