@@ -1,8 +1,8 @@
 from pathlib import Path
 import subprocess
 
-# Known motherboard indentifers used in hwmon naming
-MOTHERBOARDS = ("gigabyte_wmi", "it87", "it86", "thinkpad-isa")
+# known motherboard indentifers / Super I/O chips
+MOTHERBOARDS = ("gigabyte_wmi", "asus_wmi", "asusec", "nct6", "it86", "it87", "w83", "pch_")
 
 # represents a single hwmon sensor (_input file)
 class Sensor:
